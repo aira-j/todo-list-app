@@ -1,13 +1,21 @@
 alltasks=[]  #creating empty list for dict of tasks
 while True:
-    print("What would you like to do?")
-    print("1. Add a task")
-    print("2. View Pending Tasks")
-    print("3. Mark Tasks as Complete")
-    print("4. Delete Tasks")
-    print("5. View Completed Tasks")
-    print("6. Exit")
-    choice=int(input("enter your choice (1-6): "))  # 1. Show menu option
+    print("What would you like to do? \n" \
+    "1. Add a task \n" \
+    "2. View Pending Tasks\n" \
+    "3. Mark Tasks as Complete\n" \
+    "4. Delete Tasks\n" \
+    "5. View Completed Tasks\n" \
+    "6. Exit")
+    try:
+        choice=int(input("enter your choice (1-6): "))  # 1. Show menu option
+    except ValueError:
+        print("enter a valid value")
+        continue
+    
+    if choice<1 or choice>6:
+        print("enter a value between 1 and 6")
+        continue
 
     if choice==1:
         task={}
@@ -47,30 +55,45 @@ while True:
                      
                     print(ch, ". ", i["task"])
                     ch+=1
-                comp=int(input("which task have u completed?(1/2/3..)"))
+                try:
+                    comp=int(input("which task have u completed?(1/2/3..)"))
+                except ValueError:
+                    print("Enter a valid value")
+                    continue
                         #asking user which task they have completed
-
-        index=comp-1
-        t=pending[index]
-        t["status"]="completed"
-        for i in alltasks:
-             if i['task']==t['task']:
-                  i["status"]="completed"
-        print("task", comp, "marked as completed successfully")
-                            #marking task as complete
+                if 0<comp<=len(pending):
+                    index=comp-1
+                    t=pending[index]
+                    t["status"]="completed"
+                    for i in alltasks:
+                        if i['task']==t['task']:
+                            i["status"]="completed"
+                            print("task", comp, "marked as completed successfully")
+                                #marking task as complete
+                else:
+                    print("enter a valid value")
+                    continue
 
     elif choice==4:
-        s=1
-        print("all tasks are:")
-        for i in alltasks:
-             print("task", s, ":", i["task"], "; status:", i["status"])
-        dlt=int(input("which task you want to delete(1/2/3..)"))
-        if 0<dlt<=len(alltasks):
-            no=dlt-1
-            del alltasks[no]
-            print("task deleted successfully")
+        if not alltasks:
+             print("no tasks")
         else:
-            print("invalid number entered")
+            s=1
+            print("all tasks are:")
+            for i in alltasks:
+                print("task", s, ":", i["task"], "; status:", i["status"])
+            try:
+                dlt=int(input("which task you want to delete(1/2/3..)"))
+            except ValueError:
+                print("Enter a valid value")
+                continue
+            if 0<dlt<=len(alltasks):
+                no=dlt-1
+                del alltasks[no]
+                print("task deleted successfully")
+            else:
+                print("invalid number entered")
+                continue
                                     #deleting task
     
     elif choice==5:
